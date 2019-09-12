@@ -1,5 +1,6 @@
-﻿  decode.cpp
-  encode.cpp
-  main.cpp
-  Generating Code...
-  cse310-project1.vcxproj -> C:\Users\hbowm\Documents\cse310-workspace\cse310-project1\x64\Debug\cse310-project1.exe
+﻿  main.cpp
+C:\Users\hbowm\Documents\cse310-workspace\cse310-project1\code\encode.h(13,35): warning C4930:  'std::vector<std::vector<char,std::allocator<char>>,std::allocator<_Ty>> v(void)': prototyped function not called (was a variable definition intended?)
+C:\Users\hbowm\Documents\cse310-workspace\cse310-project1\code\encode.h(13,35): warning C4930:         with
+C:\Users\hbowm\Documents\cse310-workspace\cse310-project1\code\encode.h(13,35): warning C4930:         [
+C:\Users\hbowm\Documents\cse310-workspace\cse310-project1\code\encode.h(13,35): warning C4930:             _Ty=std::vector<char,std::allocator<char>>
+C:\Users\hbowm\Documents\cse310-workspace\cse310-project1\code\encode.h(13,35): warning C4930:         ]
