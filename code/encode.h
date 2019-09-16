@@ -2,6 +2,7 @@
 #define ENCODE_H
 
 #include <vector>
+#
 
 class Encode {
 
