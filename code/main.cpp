@@ -2,9 +2,10 @@
 #include <iomanip>
 #include <string>
 #include <fstream>
+#include <vector>
 
 //DEBUG
-#include <sstream>
+//#include <sstream>
 
 #include"encode.h"
 
@@ -15,9 +16,12 @@ int main(int argc, char* argv[]) {
 	//Variables
 	std::string lineInput;
 
+
+	std::vector< std::vector<char> > dataBlock(32768, std::vector<char>(32768));
+
 	//DEBUG variables
-	int x = 0;
-	std::stringstream geek();
+	//int x = 0;
+	//std::stringstream geek();
 
 
 	std::ios::sync_with_stdio(false);

@@ -1,26 +1,28 @@
 #ifndef ENCODE_H
 #define ENCODE_H
 
+#include <iostream>
 #include <vector>
-#
 
-#define DATA_BLOCK_SIZE 32768
+//#define DATA_BLOCK_SIZE 32768
 
 class Encode {
 
+
+	//std::vector< std::vector<char> > dataBlock(32768, std::vector<char>(32768));
+
 	private:
 		int charCount;
-		std::vector<std::vector<char>> dataBlock(DATA_BLOCK_SIZE, std::vector<char>(DATA_BLOCK_SIZE, 0));
 
 
 	public:
 		Encode() {
-			dataBlock;
+			//dataBlock;
 			charCount = 0;
 		}
 
 		Encode(int n) {
-			dataBlock;
+			//dataBlock;
 			charCount = n;
 		}
 
