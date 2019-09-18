@@ -1,0 +1,112 @@
+//std::vector<char> tempVector; = std::vector<char>(DATA_BLOCK_SIZE);
+//std::vector< std::vector<char> > auxDataBlock; = std::vector< std::vector<char> >(DATA_BLOCK_SIZE, std::vector<char>(DATA_BLOCK_SIZE));
+
+
+######################
+	for (char ch : lineInput) {
+
+		//tempVector.push_back(ch);
+
+		//DEBUG
+		std::cout << ch << "";
+
+	}
+	std::cout << "\n";
+
+
+############
+
+//std::string lineInput; //string of each line of text file
+
+#################
+
+
+//while (std::getline(std::cin, lineInput)) {
+
+
+#################
+
+//for (int i = 0; i < n - 1; i++) {
+
+	//	char tempChar = tempVector.at(0);
+	//	std::vector<char> v;
+
+	//	for (size_t j = 0; j < tempVector.size() - 1; j++) {
+
+	//		v.at(j) = tempVector.at(j + 1);
+	//	}
+	//	v.at(tempVector.size() - 1) = tempChar;
+
+	//	auxDataBlock[i] = v;
+	//}
+
+
+##################
+
+	//Print auxDataBlock
+	//std::cout << "\n" << "##print Aux##" << "\n";
+	//for (size_t i = 0; i < auxDataBlock.size(); i++) {
+	//	for (size_t j = 0; j < auxDataBlock[i].size(); j++) {
+	//		std::cout << "j:" << j << auxDataBlock[i][j] << ' ';
+	//	}
+	//	
+	//	std::cout << "i:" << i << '\n';
+	//}
+
+
+#################
+
+	//DEBUG: Test Encode class
+	//myEncodeObj.set(auxDataBlock);
+	//myEncodeObj.printData();
+
+
+##########################
+
+	//DEBUG: Print out the tempVector
+	std::cout << "\n" << "##DEBUG: tempVector##" << "\n";
+	for (auto const& i : outputVector) {
+		std::cout << i << "";
+	}
+
+
+
+
+
+##########################
+
+
+//std::vector<char> charShifter(std::vector<char> v1, int n, int b) {
+//
+//	if (b < 1) {
+//		return v1;
+//	}
+//	else {
+//
+//		std::vector<char> v2;
+//		char tempChar = v1.at(0);
+//
+//		for (int i = 1; i < (n); i++) {
+//			v2.push_back(v1[i]);
+//		}
+//		v2.push_back(tempChar);
+//
+//		charShifter(v2, n, (b - 1));
+//
+//	}
+//
+//}
+
+//outputVector = charShifter(inputVector, n, n);
+
+
+
+
+#############################
+
+
+	/*for (size_t j = 0; j < tempVector.size() - 1; j++) {
+
+		v.at(j) = tempVector.at(j + 1);
+	}*/
+	//v.at(tempVector.size() - 1) = tempChar;
