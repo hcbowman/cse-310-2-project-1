@@ -4,16 +4,13 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
-#define DATA_BLOCK_SIZE 64 
 
 class Encode {
 
 
 	private:
 		int charCount;
-		std::vector< std::vector<char> > dataBlock = std::vector< std::vector<char> >(DATA_BLOCK_SIZE, std::vector<char>(DATA_BLOCK_SIZE));
+		std::vector< std::vector<char> > dataBlock;
 
 
 	public:

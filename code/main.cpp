@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
 
 
 		//Temp objects
-		std::vector< string > auxDataBlock; //nxn matrix of chars from the text file, that will be Cyclic shifted and then sorted
+		std::vector< std::string > auxDataBlock; //nxn matrix of chars from the text file, that will be Cyclic shifted and then sorted
 		std::string sortedColumnChars; //A vector consisting of chars from the last column of the sorted auxDataBlock
 		std::string v1;
 
@@ -173,7 +173,7 @@ void insertionSort(std::vector< std::string >& bar) {
 
 		for (unsigned int j = i; j > 0 && bar[j - 1] > bar[j]; j--) {
 
-			string temp = bar[j];
+			std::string temp = bar[j];
 
 			bar[j] = bar[j - 1];
 

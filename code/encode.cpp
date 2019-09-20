@@ -6,18 +6,6 @@ void Encode::set(std::vector< std::vector<char> > inputVector)
 {
 
 	dataBlock = inputVector;
-
-
-	/*
-	for (int i = 0; i < 10; i++)
-	{
-		dataBlock.push_back(std::vector<char>());
-		for (int j = 0; j < 20; j++)
-		{
-			dataBlock[i].push_back(j);
-		}
-	}
-	*/
 }
 
 std::string Encode::get()
