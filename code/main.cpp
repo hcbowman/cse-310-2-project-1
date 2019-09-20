@@ -4,210 +4,247 @@
 #include <vector>
 #include <map>
 
-void sortFunct(std::vector< std::vector<char> >& bar);
-void mergeSort(std::vector< std::vector<char> >& left, std::vector< std::vector<char> >& right, std::vector< std::vector<char> >& bars);
+void mergeSort(std::vector< std::string >& bar);
+void mergeHelper(std::vector< std::string >& left, std::vector< std::string >& right, std::vector< std::string >& bars);
+void insertionSort(std::vector< std::string >& bar);
 
 #include"encode.h"
 
 
-//#define DATA_BLOCK_SIZE 64
-
-
 int main(int argc, char* argv[]) {
 
-	std::cout << "project 1 start" << "\n" << "\n";
+	std::cout << "CSE310 Project 1" << "\n" << "\n";
 
 	//Variables
-	char c; //char input from text file
-	int n = 0; //char count, including spaces
+	std::string lineArg;
+	int index;
 
-
-	//Vector objects
-	std::vector<char> inputVector;
-	std::vector<char> outputVector;
-	std::vector< std::vector<char> > auxDataBlock; //nxn matrix of chars from the text file, that will be Cyclic shifted and then sorted
-	std::vector<char> lastChars; //A vector consisting of chars from the last columb of the sorted auxDataBlock
+	//Objects
+	std::string compressedChars; //Vector containing the compressed output from the auxDataBlock
+	std::string inputLine;
 
 	//Disable synchronization between the C and C++ standard streams
 	std::ios::sync_with_stdio(false);
 
 
 
-	//DEBUG: Read command line arguments
-	std::cout << "\n" << "##Read arguments##" << "\n";
-	std::cout << "argc: " << argc << "\n";
-	for (int i = 0; i < argc; i++) {
-		std::cout << "argv[" << i << "] " << argv[i] << "\n";
+	//DEBUG: Print command line arguments
+	//std::cout << "\n" << "########## DEBUG: Print arguments ##########" << "\n";
+	//std::cout << "argc: " << argc << "\n";
+	//for (int i = 0; i < argc; i++) {
+	//	std::cout << "argv[" << i << "] " << argv[i] << "\n";
+	//}
+
+
+	if (argv[1] != NULL) {
+		lineArg = argv[1];
+	}
+	else {
+		std::cout << "No input defaulting to insertion sort" << "\n";
+		lineArg = "insertion";
 	}
 
 
-	//Read eachline from stdin and parse each char to a vector, inputVector
-	std::cout << "\n" << "##stdin##" << "\n";
-	while (std::cin.get(c)) {
-
-		std::cout << c;
-		inputVector.push_back(c);
-		n++;
-
+	if (lineArg == "insertion") {
+		std::cout << "Use insertion sort for encoding algorithm" << "\n";
 	}
-
-	//DEBUG: prints out n and the number of characters of the input text data
-	std::cout << "\n";
-	//std::cout << "n = " << n << "\n";
-	//std::cout << "inputVector.size = " << inputVector.size() << "\n";
-	std::cout << "\n";
-
-
-	//Cyclic shift all char in tempVector to the left in a new vector "v", and copy this to the 2nd row of the auxDataBlock for each n-1 chars
-	std::cout << "\n" << "##Shift and make auxDataBlock##" << "\n";
-	std::vector<char> v1;
-	v1 = inputVector;
-
-	for (int i = 0; i < n; i++) {
-
-
-		char tempChar;
-		std::vector<char> v2;
-
-		//Print vector before next shift
-		for (auto const& i : v1) {
-			std::cout << i;
-		}
-		std::cout << "\n";
-
-		auxDataBlock.push_back(v1);
-
-		//Save first char to be put at end
-		tempChar = v1.at(0);
-
-		//Save each char, after the first char, to a new temp array, called v2
-		for (int j = 1; j < (n); j++) {
-			v2.push_back(v1[j]);
-		}
-
-		//put the saved first char from before at the end of the temp array, v2
-		v2.push_back(tempChar);
-
-		//save the temp array, v2, over the original
-		v1 = v2;
+	else if (lineArg == "merge"){
+		std::cout << "Use merge sort for encoding algorithm" << "\n";
+	}
+	else {
+		std::cout << "wrong input... defaulting to insertion" << "\n";
+		lineArg = "insertion";
 	}
 
 
+	//This while loop reads a line from stdin and then encodes it
+	while (std::getline(std::cin, inputLine)) {
 
 
-	//Print auxDataBlock
-	std::cout << "\n" << "##Print Aux: BEFORE##" << "\n";
-	for (int i = 0; i < n; i++) {
+		//Temp objects
+		std::vector< string > auxDataBlock; //nxn matrix of chars from the text file, that will be Cyclic shifted and then sorted
+		std::string sortedColumnChars; //A vector consisting of chars from the last column of the sorted auxDataBlock
+		std::string v1;
 
-		std::cout << "Index:" << i << " | ";
 
-		for (int j = 0; j < n; j++) {
 
-			std::cout << auxDataBlock[i][j];
+		//This for loop copies the string to each new index of the vector, shifted
+		v1 = inputLine;
+		for (unsigned int i = 0; i < inputLine.size(); i++) {
+			char tempChar;
+			std::string v2;
 
+			//DEBUG: Print vector before next shift
+			//for (auto const& i : v1) {
+			//	std::cout << i;
+			//}
+			//std::cout << "\n";
+
+			auxDataBlock.push_back(v1);
+
+			//Save first char to be put at end
+			tempChar = v1.at(0);
+
+			//Save each char, after the first char, to a new temp array, called v2
+			for (unsigned int j = 1; j < inputLine.size(); j++) {
+				v2.push_back(v1[j]);
+			}
+
+			//put the saved first char from before at the end of the temp array, v2
+			v2.push_back(tempChar);
+
+			//save the temp array, v2, over the original
+			v1 = v2;
 		}
 
-		std::cout << "\n";
+		//Sort my block
+		if (lineArg == "merge") {
+			mergeSort(auxDataBlock);
+		}
+		else {
+			insertionSort(auxDataBlock);
+		}
 
-	}
 
 
+		////DEBUG: Print auxDataBlock
+		//std::cout << "\n" << "########## Print sorted Aux ##########" << "\n";
+		//for (unsigned int i = 0; i < inputLine.size(); i++) {
 
-	//Sort auxDataBlock
-	std::cout << "\n" << "##Sort Aux##" << "\n";
-	sortFunct(auxDataBlock);
+		//	std::cout << "Index:" << i << " | ";
 
-	//Print auxDataBlock
-	std::cout << "\n" << "##Print Aux: AFTER##" << "\n";
-	for (int i = 0; i < n; i++) {
+		//	for (unsigned int j = 0; j < inputLine.size(); j++) {
+		//		std::cout << auxDataBlock[i][j];
+		//	}
 
-		std::cout << "Index:" << i << " | ";
+		//	std::cout << "\n";
+		//}
 
-		for (int j = 0; j < n; j++) {
 
-			std::cout << auxDataBlock[i][j];
+		//Find idex of original string
+		for (unsigned int i = 0; i < inputLine.size(); i++) {
+
+			if (inputLine == auxDataBlock[i]) {
+				index = i;
+				break;
+			}
 
 		}
 
-		std::cout << "\n";
+		//Get the last column
+		for (unsigned int i = 0; i < inputLine.size(); i++) {
+			int jj = (inputLine.size() - 1);
+			sortedColumnChars.push_back(auxDataBlock[i][jj]);
+		}
 
-	}
 
-	//Get the last char of each row, make it it's own string and compress it
-	std::cout << "\n" << "##Get new String and Compress##" << "\n";
+		//Count occurrences of the chars / compress it
+		std::cout << index << "\n";
+		for (unsigned int i = 0; i < inputLine.size(); i++) {
 
-	std::map <int, char> myMap;
+			int count = 1;
 
-	for (int i = 0; i < n; i++) {
-		int j = (n - 1);
-		lastChars.push_back(auxDataBlock[i][j]);
-		std::cout << auxDataBlock[i][j];
-	}
+			while (i < inputLine.size() - 1 && sortedColumnChars[i] == sortedColumnChars[i + 1]) {
+				count++;
+				i++;
+			}
 
-	for (auto c : lastChars) {
-		++myMap[c];
-	}
+			//Output encoded text
+			std::cout << (int)count << " " << sortedColumnChars[i] << " ";
 
-	for (int i = 0; i < myMap.size(); i++) {
-		
-		std::cout << myMap[i];
+
+		}
+
+
+
+		std::cout << "\n" << "\n";
 
 	}
 
 	std::cout << "\n" << "End" << "\n";
 
 	//P.S. There is no Return 0; I intend main.cpp to only exist in a non-failure state
+
 }
 
-void sortFunct(std::vector< std::vector<char> >& bar) {
+void insertionSort(std::vector< std::string >& bar) {
 
-	if (bar.size() <= 1) {
+	for (unsigned int i = 1; i < bar.size(); i++) {
+
+		for (unsigned int j = i; j > 0 && bar[j - 1] > bar[j]; j--) {
+
+			string temp = bar[j];
+
+			bar[j] = bar[j - 1];
+
+			bar[j - 1] = temp;
+
+		}
+
+	}
+}
+
+
+
+
+//Merge Sort function
+void mergeSort(std::vector< std::string >& bas) {
+
+	//Base case
+	if (bas.size() <= 1) {
 		return;
 	}
 
-	int mid = bar.size() / 2;
-	std::vector< std::vector<char> > left;
-	std::vector< std::vector<char> > right;
+	//Mid point
+	int mid = bas.size() / 2;
 
-	for (size_t j = 0; j < mid; j++) {
-		left.push_back(bar[j]);
+	//Left and right sub-vectors
+	std::vector< std::string > leftVector;
+	std::vector< std::string > rightVector;
+
+	//Fill left and right sub-vectors
+	for (size_t j = 0; j < (unsigned int)mid; j++) {
+		leftVector.push_back(bas[j]);
+	}
+	for (size_t j = 0; j < (bas.size()) - mid; j++) {
+		rightVector.push_back(bas[mid + j]);
 	}
 
-	for (size_t j = 0; j < (bar.size()) - mid; j++) {
-		right.push_back(bar[mid + j]);
-	}
-
-	sortFunct(left);
-	sortFunct(right);
-	mergeSort(left, right, bar);
+	//Reeecuuuursion ruulz
+	mergeSort(leftVector);
+	mergeSort(rightVector);
+	mergeHelper(leftVector, rightVector, bas);
 }
 
-void mergeSort(std::vector< std::vector<char> >& left, std::vector< std::vector<char> >& right, std::vector< std::vector<char> >& bars)
+//A helper function for merge sort
+void mergeHelper(std::vector< std::string >& left, std::vector< std::string >& right, std::vector< std::string >& base)
 {
-	int nL = left.size();
-	int nR = right.size();
+	//Variables
+	int newLeft = left.size();
+	int newRight = right.size();
 	int leftLoop = 0;
 	int rightLoop = 0;
 	int barLoop = 0;
 
-	while (rightLoop < nL && barLoop < nR)
+	//
+	while (rightLoop < newLeft && barLoop < newRight)
 	{
 		if (left[rightLoop] < right[barLoop]) {
-			bars[leftLoop] = left[rightLoop];
+			base[leftLoop] = left[rightLoop];
 			rightLoop++;
 		}
 		else {
-			bars[leftLoop] = right[barLoop];
+			base[leftLoop] = right[barLoop];
 			barLoop++;
 		}
 		leftLoop++;
 	}
-	while (rightLoop < nL) {
-		bars[leftLoop] = left[rightLoop];
+	while (rightLoop < newLeft) {
+		base[leftLoop] = left[rightLoop];
 		rightLoop++; leftLoop++;
 	}
-	while (barLoop < nR) {
-		bars[leftLoop] = right[barLoop];
+	while (barLoop < newRight) {
+		base[leftLoop] = right[barLoop];
 		barLoop++; leftLoop++;
 	}
 }

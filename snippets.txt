@@ -110,3 +110,62 @@
 		v.at(j) = tempVector.at(j + 1);
 	}*/
 	//v.at(tempVector.size() - 1) = tempChar;
+
+
+
+###########
+	//for (int i = 0; i < (n-1); i++) {
+
+
+	//	if (lastChars[i] == lastChars[ (i + 1)]) {
+
+
+	//		count++;
+	//		
+	//		std::cout << "\n" << "if: lastChars[i] = " << lastChars[i] << " lastChars[i+1] = " << lastChars.at(i +1) << "\n";
+	//		std::cout << "count = " << count << "\n";
+
+	//		std::cout << "befor: compressedChars[j] = " << (int)compressedChars[j] << " compressedChars[j + 1] = " << compressedChars[j + 1] << "\n";
+	//		compressedChars[j] = count;
+	//		compressedChars[j + 1] = lastChars[i + 1];
+	//		std::cout << "after: compressedChars[j] = " << (int)compressedChars[j] << " compressedChars[j + 1] = " << compressedChars[j + 1] << "\n";
+
+
+	//	}
+	//	else
+	//	{
+	//		count = 1;
+
+	//		std::cout << "\n" << "else: lastChars[i] = " << lastChars[i] << " lastChars[i+1] = " << lastChars.at(i + 1) << "\n";
+	//		std::cout << "count = " << count << "\n";
+
+	//		compressedChars[j] = count;
+	//		compressedChars[j + 1] = lastChars[i];
+
+	//		
+
+	//	}
+
+	//	j = j + 2;
+
+	//}
+
+
+
+
+##############
+	//for (auto c : lastChars) {
+	//	++myMap[c];
+	//}
+
+	//for (int i = 0; i < myMap.size(); i++) {
+	//	
+	//	std::cout << myMap[i];
+
+	//}
+
+
+####################
+		//for (unsigned int i = 0; i < v1.size(); i++) {
+		//	std::cout << v1.at(i);
+		//}

@@ -8,4 +8,4 @@ encode.o: encode.cpp
 	$(CC) $(CPPFLAGS) -c encode.cpp
 
 clean:
-	rm -f *.o *.exe
+	rm -f *.o *.exe *.out
