@@ -7,6 +7,7 @@
 void mergeSort(std::vector< std::string >& bar);
 void mergeHelper(std::vector< std::string >& left, std::vector< std::string >& right, std::vector< std::string >& bars);
 void insertionSort(std::vector< std::string >& bar);
+void insertionSort2(std::vector< std::string >& bar);
 
 #include"encode.h"
 
@@ -18,6 +19,7 @@ int main(int argc, char* argv[]) {
 	//Variables
 	std::string lineArg;
 	int index;
+	char c; //For the chars read in with cin.get()
 
 	//Objects
 	std::string compressedChars; //Vector containing the compressed output from the auxDataBlock
@@ -59,6 +61,14 @@ int main(int argc, char* argv[]) {
 
 	//This while loop reads a line from stdin and then encodes it
 	while (std::getline(std::cin, inputLine)) {
+
+	//while (std::cin.get(c)) {
+
+	//	c = c - 48;
+	//	std::cout << (int)c << "\n";
+
+		
+
 
 
 		//Temp objects
@@ -139,7 +149,7 @@ int main(int argc, char* argv[]) {
 
 
 		//Count occurrences of the chars / compress it
-		std::cout << index << "\n";
+		//std::cout << index << "\n";
 		for (unsigned int i = 0; i < inputLine.size(); i++) {
 
 			int count = 1;
@@ -150,14 +160,14 @@ int main(int argc, char* argv[]) {
 			}
 
 			//Output encoded text
-			std::cout << (int)count << " " << sortedColumnChars[i] << " ";
+			//std::cout << (int)count << " " << sortedColumnChars[i] << " ";
 
 
 		}
 
 
 
-		std::cout << "\n" << "\n";
+		//std::cout << "\n" << "\n";
 
 	}
 
@@ -182,6 +192,28 @@ void insertionSort(std::vector< std::string >& bar) {
 		}
 
 	}
+}
+
+void insertionSort2(std::vector< std::string >& bar) {
+
+
+	for (int i = 1; i < bar.size(); i++) {
+
+
+
+		std::string key = bar[i];
+
+		int j = i - 1;
+		while (j > 0 || key < bar[j]) {
+
+			bar[j + 1] = bar[j];
+			j--;
+		}
+		bar[j + 1] = key;
+
+
+	}
+
 }
 
 
