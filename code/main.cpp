@@ -149,7 +149,7 @@ int main(int argc, char* argv[]) {
 
 
 		//Count occurrences of the chars / compress it
-		//std::cout << index << "\n";
+		std::cout << index << "\n";
 		for (unsigned int i = 0; i < inputLine.size(); i++) {
 
 			int count = 1;
@@ -160,7 +160,7 @@ int main(int argc, char* argv[]) {
 			}
 
 			//Output encoded text
-			//std::cout << (int)count << " " << sortedColumnChars[i] << " ";
+			std::cout << (int)count << " " << sortedColumnChars[i] << " ";
 
 
 		}
@@ -197,7 +197,7 @@ void insertionSort(std::vector< std::string >& bar) {
 void insertionSort2(std::vector< std::string >& bar) {
 
 
-	for (int i = 1; i < bar.size(); i++) {
+	for (unsigned int i = 1; i < bar.size(); i++) {
 
 
 
