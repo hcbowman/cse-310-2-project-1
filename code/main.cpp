@@ -3,18 +3,25 @@
 #include <string>
 #include <vector>
 #include <map>
+#include"encode.h"
+#include"decode.h"
+
+
+#ifdef DECRYPT
+#define CASE_INDEX 2
+#else
+#define CASE_INDEX 1
+#endif
 
 void mergeSort(std::vector< std::string >& bar);
 void mergeHelper(std::vector< std::string >& left, std::vector< std::string >& right, std::vector< std::string >& bars);
 void insertionSort(std::vector< std::string >& bar);
 void insertionSort2(std::vector< std::string >& bar);
 
-#include"encode.h"
-
 
 int main(int argc, char* argv[]) {
 
-	std::cout << "CSE310 Project 1" << "\n" << "\n";
+	//std::cout << "CSE310 Project 1" << "\n" << "\n";
 
 	//Variables
 	std::string lineArg;
@@ -37,143 +44,151 @@ int main(int argc, char* argv[]) {
 	//	std::cout << "argv[" << i << "] " << argv[i] << "\n";
 	//}
 
-
+	//Checks for a specified sort. If none, it will default to insertion sort
 	if (argv[1] != NULL) {
 		lineArg = argv[1];
 	}
 	else {
-		std::cout << "No input defaulting to insertion sort" << "\n";
+		//std::cout << "No input defaulting to insertion sort" << "\n";
 		lineArg = "insertion";
 	}
 
+	//DEBUG:
+	//if (lineArg == "insertion") {
+	//	std::cout << "Use insertion sort for encoding algorithm" << "\n";
+	//}
+	//else if (lineArg == "merge"){
+	//	std::cout << "Use merge sort for encoding algorithm" << "\n";
+	//}
+	//else {
+	//	std::cout << "wrong input... defaulting to insertion" << "\n";
+	//	lineArg = "insertion";
+	//}
 
-	if (lineArg == "insertion") {
-		std::cout << "Use insertion sort for encoding algorithm" << "\n";
-	}
-	else if (lineArg == "merge"){
-		std::cout << "Use merge sort for encoding algorithm" << "\n";
-	}
-	else {
-		std::cout << "wrong input... defaulting to insertion" << "\n";
-		lineArg = "insertion";
-	}
+	switch (CASE_INDEX) {
 
+		case 1:
 
-	//This while loop reads a line from stdin and then encodes it
-	while (std::getline(std::cin, inputLine)) {
-
-	//while (std::cin.get(c)) {
-
-	//	c = c - 48;
-	//	std::cout << (int)c << "\n";
-
-		
+			//This while loop reads a line from stdin and then encodes it
+			while (std::getline(std::cin, inputLine)) {
 
 
 
-		//Temp objects
-		std::vector< std::string > auxDataBlock; //nxn matrix of chars from the text file, that will be Cyclic shifted and then sorted
-		std::string sortedColumnChars; //A vector consisting of chars from the last column of the sorted auxDataBlock
-		std::string v1;
+
+
+				//Temp objects
+				std::vector< std::string > auxDataBlock; //nxn matrix of chars from the text file, that will be Cyclic shifted and then sorted
+				std::string sortedColumnChars; //A vector consisting of chars from the last column of the sorted auxDataBlock
+				std::string v1;
 
 
 
-		//This for loop copies the string to each new index of the vector, shifted
-		v1 = inputLine;
-		for (unsigned int i = 0; i < inputLine.size(); i++) {
-			char tempChar;
-			std::string v2;
+				//This for loop copies the string to each new index of the vector, shifted
+				v1 = inputLine;
+				for (unsigned int i = 0; i < inputLine.size(); i++) {
+					char tempChar;
+					std::string v2;
 
-			//DEBUG: Print vector before next shift
-			//for (auto const& i : v1) {
-			//	std::cout << i;
-			//}
-			//std::cout << "\n";
+					//DEBUG: Print vector before next shift
+					//for (auto const& i : v1) {
+					//	std::cout << i;
+					//}
+					//std::cout << "\n";
 
-			auxDataBlock.push_back(v1);
+					auxDataBlock.push_back(v1);
 
-			//Save first char to be put at end
-			tempChar = v1.at(0);
+					//Save first char to be put at end
+					tempChar = v1.at(0);
 
-			//Save each char, after the first char, to a new temp array, called v2
-			for (unsigned int j = 1; j < inputLine.size(); j++) {
-				v2.push_back(v1[j]);
+					//Save each char, after the first char, to a new temp array, called v2
+					for (unsigned int j = 1; j < inputLine.size(); j++) {
+						v2.push_back(v1[j]);
+					}
+
+					//put the saved first char from before at the end of the temp array, v2
+					v2.push_back(tempChar);
+
+					//save the temp array, v2, over the original
+					v1 = v2;
+				}
+
+				//Sort my block
+				if (lineArg == "merge") {
+					mergeSort(auxDataBlock);
+				}
+				else {
+					insertionSort(auxDataBlock);
+				}
+
+
+
+				////DEBUG: Print auxDataBlock
+				//std::cout << "\n" << "########## Print sorted Aux ##########" << "\n";
+				//for (unsigned int i = 0; i < inputLine.size(); i++) {
+
+				//	std::cout << "Index:" << i << " | ";
+
+				//	for (unsigned int j = 0; j < inputLine.size(); j++) {
+				//		std::cout << auxDataBlock[i][j];
+				//	}
+
+				//	std::cout << "\n";
+				//}
+
+
+				//Find idex of original string
+				for (unsigned int i = 0; i < inputLine.size(); i++) {
+
+					if (inputLine == auxDataBlock[i]) {
+						index = i;
+						break;
+					}
+
+				}
+
+				//Get the last column
+				for (unsigned int i = 0; i < inputLine.size(); i++) {
+					int jj = (inputLine.size() - 1);
+					sortedColumnChars.push_back(auxDataBlock[i][jj]);
+				}
+
+
+				//Count occurrences of the chars / compress it
+				std::cout << index << "\n";
+				for (unsigned int i = 0; i < inputLine.size(); i++) {
+
+					int count = 1;
+
+					while (i < inputLine.size() - 1 && sortedColumnChars[i] == sortedColumnChars[i + 1]) {
+						count++;
+						i++;
+					}
+
+					//Output encoded text
+					std::cout << (int)count << " " << sortedColumnChars[i] << " ";
+
+
+				}
+
+
 			}
 
-			//put the saved first char from before at the end of the temp array, v2
-			v2.push_back(tempChar);
+			break;
 
-			//save the temp array, v2, over the original
-			v1 = v2;
-		}
+		case 2:
 
-		//Sort my block
-		if (lineArg == "merge") {
-			mergeSort(auxDataBlock);
-		}
-		else {
-			insertionSort(auxDataBlock);
-		}
+			while (std::cin.get(c)) {
 
+				c = c - 48;
+				std::cout << (int)c << " ";
 
-
-		////DEBUG: Print auxDataBlock
-		//std::cout << "\n" << "########## Print sorted Aux ##########" << "\n";
-		//for (unsigned int i = 0; i < inputLine.size(); i++) {
-
-		//	std::cout << "Index:" << i << " | ";
-
-		//	for (unsigned int j = 0; j < inputLine.size(); j++) {
-		//		std::cout << auxDataBlock[i][j];
-		//	}
-
-		//	std::cout << "\n";
-		//}
-
-
-		//Find idex of original string
-		for (unsigned int i = 0; i < inputLine.size(); i++) {
-
-			if (inputLine == auxDataBlock[i]) {
-				index = i;
-				break;
 			}
 
-		}
-
-		//Get the last column
-		for (unsigned int i = 0; i < inputLine.size(); i++) {
-			int jj = (inputLine.size() - 1);
-			sortedColumnChars.push_back(auxDataBlock[i][jj]);
-		}
-
-
-		//Count occurrences of the chars / compress it
-		//std::cout << index << "\n";
-		for (unsigned int i = 0; i < inputLine.size(); i++) {
-
-			int count = 1;
-
-			while (i < inputLine.size() - 1 && sortedColumnChars[i] == sortedColumnChars[i + 1]) {
-				count++;
-				i++;
-			}
-
-			//Output encoded text
-			//std::cout << (int)count << " " << sortedColumnChars[i] << " ";
-
-
-		}
-
-
-
-		//std::cout << "\n" << "\n";
+			break;
 
 	}
 
 	std::cout << "\n" << "End" << "\n";
-
-	//P.S. There is no Return 0; I intend main.cpp to only exist in a non-failure state
 
 }
 
@@ -197,7 +212,7 @@ void insertionSort(std::vector< std::string >& bar) {
 void insertionSort2(std::vector< std::string >& bar) {
 
 
-	for (int i = 1; i < bar.size(); i++) {
+	for (unsigned int i = 1; i < bar.size(); i++) {
 
 
 
