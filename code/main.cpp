@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <ctype.h>
 #include"encode.h"
 #include"decode.h"
 
@@ -17,6 +18,7 @@ void mergeSort(std::vector< std::string >& bar);
 void mergeHelper(std::vector< std::string >& left, std::vector< std::string >& right, std::vector< std::string >& bars);
 void insertionSort(std::vector< std::string >& bar);
 void insertionSort2(std::vector< std::string >& bar);
+std::string insertionSortString(std::string bar);
 
 
 int main(int argc, char* argv[]) {
@@ -25,8 +27,7 @@ int main(int argc, char* argv[]) {
 
 	//Variables
 	std::string lineArg;
-	int index;
-	char c; //For the chars read in with cin.get()
+	//char c; //For the chars read in with cin.get()
 
 	//Objects
 	std::string compressedChars; //Vector containing the compressed output from the auxDataBlock
@@ -76,10 +77,13 @@ int main(int argc, char* argv[]) {
 
 
 
-				//Temp objects
+				//Encode objects
 				std::vector< std::string > auxDataBlock; //nxn matrix of chars from the text file, that will be Cyclic shifted and then sorted
 				std::string sortedColumnChars; //A vector consisting of chars from the last column of the sorted auxDataBlock
 				std::string v1;
+
+				//Encode variables
+				int index = 0;
 
 
 
@@ -169,6 +173,7 @@ int main(int argc, char* argv[]) {
 
 
 				}
+				std::cout << "\n";
 
 
 			}
@@ -177,18 +182,145 @@ int main(int argc, char* argv[]) {
 
 		case 2:
 
-			while (std::cin.get(c)) {
+			//DEBUG
+			//std::cout << "case 2" << "\n";
 
-				c = c - 48;
-				std::cout << (int)c << " ";
+			//Decode Objects
+			std::string indexLine; //To hold the index before the line to be decoded
+			std::string encodedLine; //To hold the encoded line
+
+			//This while loop reads a line from stdin and then decodes it; basically goes through our text line by line
+			while (std::getline(std::cin, indexLine)) {
+
+				std::getline(std::cin, encodedLine);
+
+
+				//Decode temp variables
+				int position = 0; //Used to keep track of the position of the spaces 
+
+				//Decode temp Objects
+				std::string last; //Used to store the decoded last line of the sorted column
+				std::string lastSorted; //Used to store the sorted decoded last line of the sorted column
+				std::string completeDecoded; //This is the finished line
+				std::vector<std::string> decAuxDataBlock;
+				std::vector<int> next;
+
+
+				//DEBUG: 
+				//std::cout << "INDEX:" << indexLine << "\n";
+				//std::cout << encodedLine << "ENCODED" << "\n";
+
+				//Convert the index to an int for use
+				int index = std::stoi(indexLine);
+
+
+				//Iterate through the encodedLine to for parsing/decoding
+				for (unsigned int i = 0; i < encodedLine.size(); i++) {
+
+					//Check if we are at a space AND if the follwing char is not a space; this skips the inbetweener spaces but not the ones that need to be a part of the decode
+					if ( (encodedLine[i] == ' ') && (encodedLine[i + 1] != ' ' || encodedLine[i - 1] != ' ') ) {
+						position++;
+						continue;
+					}
+
+					//If the number of chars is a two digit number, else it's a single digit
+					if ( std::isdigit(encodedLine[i]) && std::isdigit(encodedLine[i + 1])) {
+
+
+						//Stores the number before the char
+						std::string stringInt;
+
+						stringInt += encodedLine[i];
+						stringInt += encodedLine[i + 1];
+
+						//DEBUG
+						//std::cout << "encodedLine[i]:" << encodedLine[i] << "\n";
+						//std::cout << "encodedLine[i++]:" << encodedLine[i + 1] << "\n";
+
+						int cnt = std::stoi(stringInt);
+
+						//DEBUG
+						//std::cout << "encodedLine2D[i]:" << cnt << "\n";
+
+						for (int j = 0; j < cnt; j++) {
+							last.push_back(encodedLine[i + 3]);
+						}
+
+						i++;
+
+					}
+					else if ( std::isdigit(encodedLine[i]) && (position%2 == 0) ) {
+
+						//DEBUG
+						//std::cout << "encodedLine1D[i]:" << encodedLine[i] << "\n";
+
+						int cnt = (int)encodedLine[i] - 48;
+
+						for (int j = 0; j < cnt; j++) {
+							last.push_back(encodedLine[i + 2]);
+						}
+
+					}
+
+				}
+
+				//DEBUG
+				//std::cout << "LAST:" << last << "\n";
+
+				//Sort last
+				lastSorted = insertionSortString(last);
+
+				//DEBUG
+				//std::cout << "lastSorted:" << lastSorted << "\n";
+
+
+				int ii = 0;
+				for (int j = 0; j < last.size(); j++) {
+
+					if ( (lastSorted[ii] == last[j]) && (lastSorted[ii] != lastSorted[ii + 1]) ) {
+							next.push_back(j);
+							j = -1;
+							ii++;
+					}
+					else if ( (lastSorted[ii] == last[j]) && (lastSorted[ii] == lastSorted[ii + 1])){
+							next.push_back(j);
+							ii++;
+					}
+
+
+				}
+
+
+				//DEBUG: Print out the int vector NEXT
+				//std::cout << "next:";
+				//for (int i : next) {
+				//	std::cout << i << " ";
+				//}
+				//std::cout << "\n";
+
+				//Use index, next and last
+				if (!next.empty()) {
+					int x = next[index];
+					for (unsigned int i = 0; i < last.size(); i++) {
+
+						completeDecoded.push_back(last[x]);
+						x = next[x];
+
+					}
+				}
+				else {
+					completeDecoded = "";
+				}
+				
+				//DEBUG
+				//std::cout << "complete decoded:" << completeDecoded << "\n";
+				std::cout << completeDecoded << "\n";
 
 			}
 
 			break;
 
 	}
-
-	std::cout << "\n" << "End" << "\n";
 
 }
 
@@ -229,6 +361,25 @@ void insertionSort2(std::vector< std::string >& bar) {
 
 	}
 
+}
+
+std::string insertionSortString(std::string bar) {
+
+	for (unsigned int i = 1; i < bar.size(); i++) {
+
+		for (unsigned int j = i; j > 0 && bar[j - 1] > bar[j]; j--) {
+
+			char temp = bar[j];
+
+			bar[j] = bar[j - 1];
+
+			bar[j - 1] = temp;
+
+		}
+
+	}
+
+	return bar;
 }
 
 

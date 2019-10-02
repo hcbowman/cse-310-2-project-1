@@ -1,2 +1,30 @@
 all: main.cpp encode.o
 	$(CC) $(CPPFLAGS) main.cpp encode.o -o encode
+
+#################################
+
+std::string token = std::strtok(encodedLine, " ");
+
+################################
+
+				//Fill the first and last columns of a vector of strings; with the sorted last and last
+				//for (unsigned int i = 0; i < last.size(); i++) {
+
+				//	decAuxDataBlock[i][last.size() - 1] += last[i];
+				//	decAuxDataBlock[i][1] += lastSorted[i];
+				//	decAuxDataBlock[i].insert(last.size() - 1,'s');
+
+
+				//}
+
+				//Find the "next" numbers
+				//for (unsigned int i = 0; i < last.size(); i++) {
+
+				//	int j = 0;
+				//	while (lastSorted[i] != last[j]) {
+				//		j++;
+				//	}
+
+				//	next.push_back(j);
+
+				//}
