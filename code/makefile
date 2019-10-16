@@ -16,4 +16,4 @@ decode.o: decode.cpp
 	$(CC) $(CPPFLAGS) -c decode.cpp
 
 clean:
-	rm -f *.o *.exe *.out
+	rm -f *.o *.exe *.out encode decode

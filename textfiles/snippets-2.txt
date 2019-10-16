@@ -1,0 +1,138 @@
+all: main.cpp encode.o
+	$(CC) $(CPPFLAGS) main.cpp encode.o -o encode
+
+#################################
+
+std::string token = std::strtok(encodedLine, " ");
+
+################################
+
+				//Fill the first and last columns of a vector of strings; with the sorted last and last
+				//for (unsigned int i = 0; i < last.size(); i++) {
+
+				//	decAuxDataBlock[i][last.size() - 1] += last[i];
+				//	decAuxDataBlock[i][1] += lastSorted[i];
+				//	decAuxDataBlock[i].insert(last.size() - 1,'s');
+
+
+				//}
+
+				//Find the "next" numbers
+				//for (unsigned int i = 0; i < last.size(); i++) {
+
+				//	int j = 0;
+				//	while (lastSorted[i] != last[j]) {
+				//		j++;
+				//	}
+
+				//	next.push_back(j);
+
+				//}
+
+
+
+###########################
+
+	//DEBUG: Print command line arguments
+	//std::cout << "\n" << "########## DEBUG: Print arguments ##########" << "\n";
+	//std::cout << "argc: " << argc << "\n";
+	//for (int i = 0; i < argc; i++) {
+	//	std::cout << "argv[" << i << "] " << argv[i] << "\n";
+	//}
+
+
+#######
+
+				////DEBUG: Print auxDataBlock
+				//std::cout << "\n" << "########## Print sorted Aux ##########" << "\n";
+				//for (unsigned int i = 0; i < inputLine.size(); i++) {
+
+				//	std::cout << "Index:" << i << " | ";
+
+				//	for (unsigned int j = 0; j < inputLine.size(); j++) {
+				//		std::cout << auxDataBlock[i][j];
+				//	}
+
+				//	std::cout << "\n";
+				//}
+
+
+
+
+				#######################
+
+
+
+									//DEBUG: Print vector before next shift
+					//for (auto const& i : v1) {
+					//	std::cout << i;
+					//}
+					//std::cout << "\n";
+
+
+
+####################
+
+
+				//DEBUG: 
+				//std::cout << "INDEX:" << indexLine << "\n";
+				//std::cout << encodedLine << "ENCODED" << "\n";
+
+
+
+
+				###################
+
+
+
+										//DEBUG
+						//std::cout << "encodedLine[i]:" << encodedLine[i] << "\n";
+						//std::cout << "encodedLine[i++]:" << encodedLine[i + 1] << "\n";
+
+
+
+
+						//DEBUG
+						//std::cout << "encodedLine2D[i]:" << cnt << "\n";
+
+
+						//DEBUG
+						//std::cout << "encodedLine1D[i]:" << encodedLine[i] << "\n";
+
+
+
+
+
+										//DEBUG
+				//std::cout << "LAST:" << last << "\n";
+
+
+
+###################
+
+
+				//DEBUG: Print out the int vector NEXT
+				//std::cout << "next:";
+				//for (int i : next) {
+				//	std::cout << i << " ";
+				//}
+				//std::cout << "\n";
+
+
+
+
+
+
+				###############
+
+
+				//DEBUG
+				//std::cout << "lastSorted:" << lastSorted << "\n";
+
+
+
+
+				//DEBUG
+				//std::cout << "complete decoded:" << completeDecoded << "\n";
+
+

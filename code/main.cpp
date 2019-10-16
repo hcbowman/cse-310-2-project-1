@@ -7,6 +7,9 @@
 #include"encode.h"
 #include"decode.h"
 
+//DEBUG: to get the run time
+//#include <chrono>
+
 
 #ifdef DECRYPT
 #define CASE_INDEX 2
@@ -16,6 +19,10 @@
 
 void mergeSort(std::vector< std::string >& bar);
 void mergeHelper(std::vector< std::string >& left, std::vector< std::string >& right, std::vector< std::string >& bars);
+
+void mergeSortString(std::string& bar);
+void mergeHelperString(std::string& left, std::string& right, std::string& bars);
+
 void insertionSort(std::vector< std::string >& bar);
 void insertionSort2(std::vector< std::string >& bar);
 std::string insertionSortString(std::string bar);
@@ -23,11 +30,14 @@ std::string insertionSortString(std::string bar);
 
 int main(int argc, char* argv[]) {
 
-	//std::cout << "CSE310 Project 1" << "\n" << "\n";
 
 	//Variables
 	std::string lineArg;
-	//char c; //For the chars read in with cin.get()
+
+	//DEBUG Variables: Cluster size
+	//int clusterS = 0;
+	//int totalChars = 0;
+	//float ratio = 0.0;
 
 	//Objects
 	std::string compressedChars; //Vector containing the compressed output from the auxDataBlock
@@ -37,34 +47,17 @@ int main(int argc, char* argv[]) {
 	std::ios::sync_with_stdio(false);
 
 
-
-	//DEBUG: Print command line arguments
-	//std::cout << "\n" << "########## DEBUG: Print arguments ##########" << "\n";
-	//std::cout << "argc: " << argc << "\n";
-	//for (int i = 0; i < argc; i++) {
-	//	std::cout << "argv[" << i << "] " << argv[i] << "\n";
-	//}
-
 	//Checks for a specified sort. If none, it will default to insertion sort
 	if (argv[1] != NULL) {
 		lineArg = argv[1];
 	}
 	else {
-		//std::cout << "No input defaulting to insertion sort" << "\n";
 		lineArg = "insertion";
 	}
 
-	//DEBUG:
-	//if (lineArg == "insertion") {
-	//	std::cout << "Use insertion sort for encoding algorithm" << "\n";
-	//}
-	//else if (lineArg == "merge"){
-	//	std::cout << "Use merge sort for encoding algorithm" << "\n";
-	//}
-	//else {
-	//	std::cout << "wrong input... defaulting to insertion" << "\n";
-	//	lineArg = "insertion";
-	//}
+
+	//DEBUG: to get the run time
+	//auto start = std::chrono::high_resolution_clock::now();
 
 	switch (CASE_INDEX) {
 
@@ -77,13 +70,18 @@ int main(int argc, char* argv[]) {
 
 
 
-				//Encode objects
+				//Temp Encode objects
 				std::vector< std::string > auxDataBlock; //nxn matrix of chars from the text file, that will be Cyclic shifted and then sorted
-				std::string sortedColumnChars; //A vector consisting of chars from the last column of the sorted auxDataBlock
+				std::string sortedColumnChars; //A string consisting of chars from the last column of the sorted auxDataBlock
 				std::string v1;
+				std::string compressedString;
 
-				//Encode variables
+				//Temp Encode variables
 				int index = 0;
+
+
+				//DEBUG
+				//totalChars += inputLine.size();
 
 
 
@@ -92,12 +90,6 @@ int main(int argc, char* argv[]) {
 				for (unsigned int i = 0; i < inputLine.size(); i++) {
 					char tempChar;
 					std::string v2;
-
-					//DEBUG: Print vector before next shift
-					//for (auto const& i : v1) {
-					//	std::cout << i;
-					//}
-					//std::cout << "\n";
 
 					auxDataBlock.push_back(v1);
 
@@ -118,26 +110,12 @@ int main(int argc, char* argv[]) {
 
 				//Sort my block
 				if (lineArg == "merge") {
+
 					mergeSort(auxDataBlock);
 				}
 				else {
 					insertionSort(auxDataBlock);
 				}
-
-
-
-				////DEBUG: Print auxDataBlock
-				//std::cout << "\n" << "########## Print sorted Aux ##########" << "\n";
-				//for (unsigned int i = 0; i < inputLine.size(); i++) {
-
-				//	std::cout << "Index:" << i << " | ";
-
-				//	for (unsigned int j = 0; j < inputLine.size(); j++) {
-				//		std::cout << auxDataBlock[i][j];
-				//	}
-
-				//	std::cout << "\n";
-				//}
 
 
 				//Find idex of original string
@@ -156,7 +134,6 @@ int main(int argc, char* argv[]) {
 					sortedColumnChars.push_back(auxDataBlock[i][jj]);
 				}
 
-
 				//Count occurrences of the chars / compress it
 				std::cout << index << "\n";
 				for (unsigned int i = 0; i < inputLine.size(); i++) {
@@ -168,22 +145,38 @@ int main(int argc, char* argv[]) {
 						i++;
 					}
 
+
+					//DEBUG:
+					//clusterS++;
+
+
 					//Output encoded text
 					std::cout << (int)count << " " << sortedColumnChars[i] << " ";
+
+					//std::string sTemp = std::to_string(count);
+					//compressedString.append(sTemp);
+					//compressedString.push_back(' ');
+					//compressedString.push_back(sortedColumnChars[i]);
+					//compressedString.push_back(' ');
 
 
 				}
 				std::cout << "\n";
-
+				//compressedString.pop_back();
+				//compressedString.push_back('\n');
+				//std::cout << compressedString;
 
 			}
+
+			//DEBUG: To get the compression ratio
+			//std::cout << "totalChars=" << totalChars;
+			//std::cout << " clusterS=" << clusterS << "\n";
+			//ratio = (float)(     ( (totalChars- clusterS) / (float)totalChars)  * 100.00);
+			//std::cout << " Ratio: " << ratio << "\n";
 
 			break;
 
 		case 2:
-
-			//DEBUG
-			//std::cout << "case 2" << "\n";
 
 			//Decode Objects
 			std::string indexLine; //To hold the index before the line to be decoded
@@ -197,6 +190,7 @@ int main(int argc, char* argv[]) {
 
 				//Decode temp variables
 				int position = 0; //Used to keep track of the position of the spaces 
+				bool threeDigitCluster = false;
 
 				//Decode temp Objects
 				std::string last; //Used to store the decoded last line of the sorted column
@@ -205,26 +199,45 @@ int main(int argc, char* argv[]) {
 				std::vector<std::string> decAuxDataBlock;
 				std::vector<int> next;
 
-
-				//DEBUG: 
-				//std::cout << "INDEX:" << indexLine << "\n";
-				//std::cout << encodedLine << "ENCODED" << "\n";
-
 				//Convert the index to an int for use
 				int index = std::stoi(indexLine);
 
 
 				//Iterate through the encodedLine to for parsing/decoding
-				for (unsigned int i = 0; i < encodedLine.size(); i++) {
+				for (unsigned int i = 0, encodedLineSize = encodedLine.size(); i < encodedLineSize; i++) {
 
 					//Check if we are at a space AND if the follwing char is not a space; this skips the inbetweener spaces but not the ones that need to be a part of the decode
 					if ( (encodedLine[i] == ' ') && (encodedLine[i + 1] != ' ' || encodedLine[i - 1] != ' ') ) {
 						position++;
+						threeDigitCluster = false;
 						continue;
 					}
 
-					//If the number of chars is a two digit number, else it's a single digit
-					if ( std::isdigit(encodedLine[i]) && std::isdigit(encodedLine[i + 1])) {
+					//If the number of chars is a two digit number, else it's a single digit, esle if its a 3 digit number
+					if (std::isdigit(encodedLine[i]) && std::isdigit(encodedLine[i + 1]) && std::isdigit(encodedLine[i + 2])) {
+
+						//Stores the number before the char
+						std::string stringInt;
+
+						threeDigitCluster = true;
+
+						stringInt += encodedLine[i];
+						stringInt += encodedLine[i + 1];
+						stringInt += encodedLine[i + 2];
+
+
+
+						int cnt = std::stoi(stringInt);
+
+
+						for (int j = 0; j < cnt; j++) {
+							last.push_back(encodedLine[i + 4]);
+						}
+
+						i++;
+
+					}
+					else if ( std::isdigit(encodedLine[i]) && std::isdigit(encodedLine[i + 1]) && encodedLine[i + 2] == ' ' && threeDigitCluster == false) {
 
 
 						//Stores the number before the char
@@ -233,14 +246,10 @@ int main(int argc, char* argv[]) {
 						stringInt += encodedLine[i];
 						stringInt += encodedLine[i + 1];
 
-						//DEBUG
-						//std::cout << "encodedLine[i]:" << encodedLine[i] << "\n";
-						//std::cout << "encodedLine[i++]:" << encodedLine[i + 1] << "\n";
+
 
 						int cnt = std::stoi(stringInt);
 
-						//DEBUG
-						//std::cout << "encodedLine2D[i]:" << cnt << "\n";
 
 						for (int j = 0; j < cnt; j++) {
 							last.push_back(encodedLine[i + 3]);
@@ -249,12 +258,10 @@ int main(int argc, char* argv[]) {
 						i++;
 
 					}
-					else if ( std::isdigit(encodedLine[i]) && (position%2 == 0) ) {
-
-						//DEBUG
-						//std::cout << "encodedLine1D[i]:" << encodedLine[i] << "\n";
+					else if ( std::isdigit(encodedLine[i]) && (position%2 == 0) && threeDigitCluster == false) {
 
 						int cnt = (int)encodedLine[i] - 48;
+
 
 						for (int j = 0; j < cnt; j++) {
 							last.push_back(encodedLine[i + 2]);
@@ -264,18 +271,19 @@ int main(int argc, char* argv[]) {
 
 				}
 
-				//DEBUG
-				//std::cout << "LAST:" << last << "\n";
-
 				//Sort last
-				lastSorted = insertionSortString(last);
+				if (lineArg == "merge") {
 
-				//DEBUG
-				//std::cout << "lastSorted:" << lastSorted << "\n";
+					lastSorted = last;
+					mergeSortString(lastSorted);
+				}
+				else {
+					lastSorted = insertionSortString(last);
+				}
 
-
+				//Get next
 				int ii = 0;
-				for (int j = 0; j < last.size(); j++) {
+				for (int j = 0, n = last.size(); j < n; j++) {
 
 					if ( (lastSorted[ii] == last[j]) && (lastSorted[ii] != lastSorted[ii + 1]) ) {
 							next.push_back(j);
@@ -291,13 +299,6 @@ int main(int argc, char* argv[]) {
 				}
 
 
-				//DEBUG: Print out the int vector NEXT
-				//std::cout << "next:";
-				//for (int i : next) {
-				//	std::cout << i << " ";
-				//}
-				//std::cout << "\n";
-
 				//Use index, next and last
 				if (!next.empty()) {
 					int x = next[index];
@@ -312,8 +313,7 @@ int main(int argc, char* argv[]) {
 					completeDecoded = "";
 				}
 				
-				//DEBUG
-				//std::cout << "complete decoded:" << completeDecoded << "\n";
+
 				std::cout << completeDecoded << "\n";
 
 			}
@@ -321,6 +321,11 @@ int main(int argc, char* argv[]) {
 			break;
 
 	}
+
+	//DEBUG: for running time
+	/*auto stop = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds > (stop - start);
+	std::cout << "Time(microseconds):" << duration.count() << "\n";*/
 
 }
 
@@ -401,14 +406,13 @@ void mergeSort(std::vector< std::string >& bas) {
 	std::vector< std::string > rightVector;
 
 	//Fill left and right sub-vectors
-	for (size_t j = 0; j < (unsigned int)mid; j++) {
+	for (unsigned int j = 0; j < (unsigned int)mid; j++) {
 		leftVector.push_back(bas[j]);
 	}
-	for (size_t j = 0; j < (bas.size()) - mid; j++) {
+	for (unsigned int j = 0; j < (bas.size()) - mid; j++) {
 		rightVector.push_back(bas[mid + j]);
 	}
 
-	//Reeecuuuursion ruulz
 	mergeSort(leftVector);
 	mergeSort(rightVector);
 	mergeHelper(leftVector, rightVector, bas);
@@ -416,6 +420,69 @@ void mergeSort(std::vector< std::string >& bas) {
 
 //A helper function for merge sort
 void mergeHelper(std::vector< std::string >& left, std::vector< std::string >& right, std::vector< std::string >& base)
+{
+	//Variables
+	int newLeft = left.size();
+	int newRight = right.size();
+	int leftLoop = 0;
+	int rightLoop = 0;
+	int barLoop = 0;
+
+	//
+	while (rightLoop < newLeft && barLoop < newRight)
+	{
+		if (left[rightLoop] < right[barLoop]) {
+			base[leftLoop] = left[rightLoop];
+			rightLoop++;
+		}
+		else {
+			base[leftLoop] = right[barLoop];
+			barLoop++;
+		}
+		leftLoop++;
+	}
+	while (rightLoop < newLeft) {
+		base[leftLoop] = left[rightLoop];
+		rightLoop++; leftLoop++;
+	}
+	while (barLoop < newRight) {
+		base[leftLoop] = right[barLoop];
+		barLoop++; leftLoop++;
+	}
+}
+
+
+
+//Merge Sort function for strings
+void mergeSortString(std::string& bas) {
+
+	//Base case
+	if (bas.size() <= 1) {
+		return;
+	}
+
+	//Mid point
+	int mid = bas.size() / 2;
+
+	//Left and right sub-vectors
+	std::string  leftVector;
+	std::string rightVector;
+
+	//Fill left and right sub-vectors
+	for (unsigned int j = 0; j < (unsigned int)mid; j++) {
+		leftVector.push_back(bas[j]);
+	}
+	for (unsigned int j = 0; j < (bas.size()) - mid; j++) {
+		rightVector.push_back(bas[mid + j]);
+	}
+
+	mergeSortString(leftVector);
+	mergeSortString(rightVector);
+	mergeHelperString(leftVector, rightVector, bas);
+}
+
+//A helper function for merge sort
+void mergeHelperString(std::string& left, std::string& right, std::string& base)
 {
 	//Variables
 	int newLeft = left.size();
